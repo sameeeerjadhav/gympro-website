@@ -1,225 +1,237 @@
-"use client";
+"use client"
 
-import { Star, Quote } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import type React from "react"
+import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
+import { Quote, Star, TrendingUp, Users, Award, Zap } from "lucide-react"
 
-const testimonials = [
+// Types
+interface Testimonial {
+  id: number
+  name: string
+  role: string
+  content: string
+  avatar: string
+  rating: number
+}
+
+interface Stat {
+  icon: React.ElementType
+  value: string
+  label: string
+}
+
+// Testimonials Data
+const testimonials: Testimonial[] = [
   {
-    name: 'Raj Sharma',
-    role: 'Yoga Instructor',
-    content: "GymPro's AI form correction helped me identify posture issues I've had for years. My clients are seeing better results with fewer injuries.",
-    avatar: 'RS',
+    id: 1,
+    name: "Sarah Mitchell",
+    role: "Personal Trainer",
+    content:
+      "GymPro has completely transformed how I train my clients. The equipment is top-notch and the community is incredibly supportive. I've seen amazing results in just 3 months!",
+    avatar: "",
     rating: 5,
   },
   {
-    name: 'Priya Patel',
-    role: 'Marathon Runner',
-    content: 'The personalized training plans adapted to my recovery needs perfectly. Shaved 15 minutes off my marathon PB!',
-    avatar: 'PP',
-    rating: 4,
-  },
-  {
-    name: 'Arun Kumar',
-    role: 'IT Professional',
-    content: 'As someone with a busy schedule, the 24/7 AI coach keeps me accountable. The progress tracking is incredibly motivating.',
-    avatar: 'AK',
+    id: 2,
+    name: "Michael Chen",
+    role: "Fitness Enthusiast",
+    content:
+      "Best gym I've ever joined! The staff is knowledgeable, the facilities are always clean, and the variety of classes keeps my workouts exciting. Highly recommend to anyone serious about fitness.",
+    avatar: "",
     rating: 5,
   },
   {
-    name: 'Anjali Singh',
-    role: 'Fitness Trainer',
-    content: 'Most comprehensive fitness app I have ever used. The biomechanics analysis took my training to the next level.',
-    avatar: 'AS',
+    id: 3,
+    name: "Emily Rodriguez",
+    role: "Weight Loss Journey",
+    content:
+      "I've lost 40 pounds since joining GymPro! The trainers created a personalized plan that actually works. The supportive environment made all the difference in my transformation.",
+    avatar: "",
     rating: 5,
   },
-];
+  {
+    id: 4,
+    name: "David Thompson",
+    role: "Marathon Runner",
+    content:
+      "As a competitive runner, I need quality training facilities. GymPro delivers on every level - from cardio equipment to recovery zones. It's become an essential part of my training routine.",
+    avatar: "",
+    rating: 5,
+  },
+]
 
-export default function TestimonialsSection() {
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [mounted, setMounted] = useState(false);
+// Stats Data
+const stats: Stat[] = [
+  { icon: Users, value: "10,000+", label: "Active Members" },
+  { icon: Award, value: "500+", label: "Success Stories" },
+  { icon: TrendingUp, value: "95%", label: "Goal Achievement" },
+  { icon: Zap, value: "24/7", label: "Access Available" },
+]
+
+export default function TestimonialSection() {
+  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    setIsVisible(true)
+  }, [])
 
-  if (!mounted) return null;
+  // Animation Variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  } as const
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  } as const
+
+  const cardVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  } as const
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 px-4 xs:px-6 sm:px-8 lg:px-8 bg-gradient-to-br from-gray-900 via-black to-gray-900">
-      <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
+    <section className="relative w-full overflow-hidden bg-gradient-to-b from-gray-900 via-black to-gray-900 py-20 lg:py-32">
+      {/* Background decoration */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-20 left-10 h-72 w-72 rounded-full bg-purple-600 blur-[120px]" />
+        <div className="absolute bottom-20 right-10 h-72 w-72 rounded-full bg-blue-600 blur-[120px]" />
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Header Section */}
         <motion.div
-          initial={{ y: -20, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-8 sm:mb-10 lg:mb-12"
+          initial="hidden"
+          animate={isVisible ? "visible" : "hidden"}
+          variants={containerVariants}
+          className="mb-16 text-center"
         >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="inline-flex items-center gap-2 bg-gray-800/50 border border-gray-700 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 mb-4 sm:mb-6 hover:border-blue-500/50 hover:bg-gray-800/70 transition-all duration-300 group cursor-pointer"
-          >
-            <Quote className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400 group-hover:scale-110 transition-transform" />
-            <span className="text-xs sm:text-sm font-semibold text-gray-200 group-hover:text-white transition-colors">
-              Testimonials
-            </span>
+          <motion.div variants={itemVariants} className="mb-6 inline-flex">
+            <div className="flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-2 backdrop-blur-sm">
+              <Quote className="h-5 w-5 text-purple-400" />
+              <span className="text-sm font-medium text-purple-300">Testimonials</span>
+            </div>
           </motion.div>
-          
+
           <motion.h2
-            initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            viewport={{ once: true }}
-            className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4"
+            variants={itemVariants}
+            className="mb-4 text-balance text-4xl font-bold text-white sm:text-5xl lg:text-6xl"
           >
-            Loved by Fitness Enthusiasts
+            What Our Members Say
           </motion.h2>
-          
-          <motion.p
-            initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="text-sm sm:text-base lg:text-lg text-gray-300 max-w-2xl mx-auto px-2"
-          >
-            Join thousands of satisfied members who transformed their fitness journey with GymPro
+
+          <motion.p variants={itemVariants} className="mx-auto max-w-2xl text-pretty text-lg text-gray-400 sm:text-xl">
+            Join thousands of satisfied members who have transformed their lives with GymPro
           </motion.p>
         </motion.div>
 
         {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 px-2 sm:px-0">
-          {testimonials.map((testimonial, index) => {
-            const isHovered = hoveredCard === index;
-            
-            return (
-              <motion.div
-                key={index}
-                initial={{ y: 30, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ 
-                  duration: 0.6, 
-                  ease: "easeOut",
-                  delay: 0.3 + (index * 0.15)
-                }}
-                viewport={{ once: true }}
-                onMouseEnter={() => setHoveredCard(index)}
-                onMouseLeave={() => setHoveredCard(null)}
-                className="bg-gray-900/70 backdrop-blur-sm rounded-xl p-4 sm:p-6 lg:p-8 border border-gray-800 hover:border-blue-500/50 hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 group flex flex-col"
-              >
-                {/* Quote Icon */}
-                <div className="mb-3 sm:mb-4 lg:mb-6">
-                  <Quote className={`w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-blue-400/30 transition-all duration-300 ${
-                    isHovered ? 'text-blue-400/70 scale-110' : ''
-                  }`} />
-                </div>
+        <motion.div
+          initial="hidden"
+          animate={isVisible ? "visible" : "hidden"}
+          variants={containerVariants}
+          className="mb-20 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+        >
+          {testimonials.map((testimonial, index) => (
+            <motion.div
+              key={testimonial.id}
+              variants={cardVariants}
+              whileHover={{
+                scale: 1.05,
+                transition: { duration: 0.3 },
+              }}
+              className="group relative overflow-hidden rounded-2xl border border-gray-800 bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-6 backdrop-blur-sm transition-all hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/20"
+            >
+              {/* Hover gradient effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 via-purple-600/0 to-blue-600/0 opacity-0 transition-opacity duration-500 group-hover:opacity-10" />
 
-                {/* Stars */}
-                <div className="flex gap-0.5 sm:gap-1 mb-3 sm:mb-4 lg:mb-6 items-center">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ scale: 0, rotate: -180 }}
-                      whileInView={{ scale: 1, rotate: 0 }}
-                      transition={{ duration: 0.4, delay: 0.8 + (index * 0.1) + (i * 0.1) }}
-                      viewport={{ once: true }}
-                      className="flex-shrink-0"
-                    >
-                      <Star
-                        className={`w-4 h-4 sm:w-5 sm:h-5 fill-yellow-400 text-yellow-400 transition-transform ${
-                          isHovered ? 'scale-110' : ''
-                        }`}
-                      />
-                    </motion.div>
-                  ))}
-                  <span className="text-gray-500 text-xs sm:text-sm ml-1 sm:ml-2">★ {testimonial.rating}.0</span>
-                </div>
-
-                {/* Testimonial Text */}
-                <p className={`text-gray-300 italic text-xs sm:text-sm lg:text-base leading-relaxed mb-4 sm:mb-6 lg:mb-8 transition-colors flex-grow ${
-                  isHovered ? 'text-gray-200' : ''
-                }`}>
-                  "{testimonial.content}"
-                </p>
-
-                {/* Client Info */}
-                <div className={`flex items-center gap-3 pt-4 sm:pt-5 lg:pt-6 border-t transition-colors ${
-                  isHovered ? 'border-gray-700' : 'border-gray-800'
-                }`}>
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    whileInView={{ scale: 1 }}
-                    transition={{ duration: 0.4, delay: 1 + (index * 0.1) }}
-                    viewport={{ once: true }}
-                    className={`relative flex h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 items-center justify-center rounded-full bg-blue-500/20 text-blue-400 font-semibold text-sm sm:text-base lg:text-lg transition-all duration-300 flex-shrink-0 ${
-                      isHovered ? 'scale-110 shadow-md shadow-blue-500/30' : ''
-                    }`}
-                  >
-                    {testimonial.avatar}
-                    {/* Verified Badge */}
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 bg-blue-500 rounded-full border-2 border-gray-900 flex items-center justify-center">
-                      <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full" />
-                    </div>
-                  </motion.div>
-                  <div className="min-w-0">
-                    <p className={`font-semibold text-sm sm:text-base transition-colors truncate ${
-                      isHovered ? 'text-blue-100' : 'text-white'
-                    }`}>
-                      {testimonial.name}
-                    </p>
-                    <p className={`text-xs sm:text-sm transition-colors truncate ${
-                      isHovered ? 'text-gray-300' : 'text-gray-400'
-                    }`}>
-                      {testimonial.role}
-                    </p>
+              <div className="relative z-10">
+                {/* Avatar */}
+                <div className="mb-4 flex items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-purple-500/30 bg-gradient-to-br from-purple-600/20 to-blue-600/20 text-lg font-bold text-purple-300 ring-2 ring-purple-500/20">
+                    {testimonial.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-white">{testimonial.name}</h3>
+                    <p className="text-sm text-gray-400">{testimonial.role}</p>
                   </div>
                 </div>
-              </motion.div>
-            );
-          })}
-        </div>
+
+                {/* Rating Stars */}
+                <div className="mb-4 flex gap-1">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+
+                {/* Quote Icon */}
+                <Quote className="mb-3 h-8 w-8 text-purple-500/30" />
+
+                {/* Content */}
+                <p className="text-pretty text-sm leading-relaxed text-gray-300">{testimonial.content}</p>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
 
         {/* Stats Section */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1 }}
-          viewport={{ once: true }}
-          className="mt-8 sm:mt-12 lg:mt-16 pt-8 sm:pt-10 lg:pt-12 border-t border-gray-800 px-2 sm:px-0"
+          initial="hidden"
+          animate={isVisible ? "visible" : "hidden"}
+          variants={containerVariants}
+          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
         >
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 xl:gap-8">
-            {[
-              { value: '50,000+', label: 'Active Members' },
-              { value: '98%', label: 'Satisfaction Rate' },
-              { value: '100+', label: 'Cities in India' },
-              { value: '4.8/5', label: 'Play Store Rating' },
-            ].map((stat, index) => (
+          {stats.map((stat, index) => {
+            const Icon = stat.icon
+            return (
               <motion.div
                 key={index}
-                initial={{ scale: 0.8, opacity: 0 }}
-                whileInView={{ scale: 1, opacity: 1 }}
-                transition={{ 
-                  duration: 0.5, 
-                  ease: "easeOut",
-                  delay: 1.2 + (index * 0.1)
+                variants={cardVariants}
+                whileHover={{
+                  y: -5,
+                  transition: { duration: 0.3 },
                 }}
-                viewport={{ once: true }}
-                className="text-center p-3 sm:p-4 rounded-lg hover:bg-gray-800/30 hover:scale-105 transition-all duration-300 cursor-pointer group"
+                className="group relative overflow-hidden rounded-xl border border-gray-800 bg-gradient-to-br from-gray-800/30 to-gray-900/30 p-6 text-center backdrop-blur-sm transition-all hover:border-purple-500/50 hover:shadow-xl hover:shadow-purple-500/10"
               >
-                <div className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-1 sm:mb-2 group-hover:text-blue-100 transition-colors">
-                  {stat.value}
-                </div>
-                <div className="text-gray-400 text-xs sm:text-sm lg:text-base group-hover:text-gray-300 transition-colors">
-                  {stat.label}
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-blue-600/0 opacity-0 transition-opacity duration-500 group-hover:opacity-10" />
+
+                <div className="relative z-10">
+                  <div className="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-purple-500/10 ring-2 ring-purple-500/20 transition-all group-hover:bg-purple-500/20 group-hover:ring-purple-500/40">
+                    <Icon className="h-7 w-7 text-purple-400 transition-transform group-hover:scale-110" />
+                  </div>
+                  <div className="mb-2 text-3xl font-bold text-white lg:text-4xl">{stat.value}</div>
+                  <div className="text-sm font-medium text-gray-400">{stat.label}</div>
                 </div>
               </motion.div>
-            ))}
-          </div>
+            )
+          })}
         </motion.div>
       </div>
     </section>
-  );
+  )
 }
