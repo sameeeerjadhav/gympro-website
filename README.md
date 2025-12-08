@@ -4,8 +4,8 @@
 ```markdown
 # GymPro - Fitness Landing Page
 
-**Live Demo:** [Vercel Link]  
-**GitHub:** [Repository Link]
+**Live Demo:** https://gympro-website.vercel.app/
+**GitHub:** https:/github.com/sameeerjadhav/gympro-website
 
 ## Features
 - Split-screen interactive hero
@@ -25,4 +25,5 @@ Next.js 14 | Tailwind CSS | Vercel v0
 
 ---
 
-*Assignment submission - [Your Name]*
+*Assignment submission - Sameer Jadhav*
+
